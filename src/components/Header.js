@@ -56,13 +56,13 @@ function Header({ windowWidth }) {
                 <Nav>
                     <Logo>
                         <Link to='/'>
-                            <img src='https://cdn.icon-icons.com/icons2/2972/PNG/512/instagram_logo_icon_186894.png' alt='logo' />
+                            <img src='https://cdn-icons-png.flaticon.com/512/2824/2824572.png' alt='logo' />
                             <div>MOIM</div>
                         </Link>
                     </Logo>
                     <ul>
-                        <li>로그인</li>
-                        <li>회원가입</li>
+                        <li><Link to='/'>로그인</Link></li>
+                        <li><Link to='/signup'>회원가입</Link></li>
                     </ul>
                 </Nav>
                 {

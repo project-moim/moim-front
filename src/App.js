@@ -4,6 +4,7 @@ import Main from './pages/Main';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import UseResize from './hooks/useResize';
+import SignUp from './pages/SignUp';
 
 const GlobalStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,
@@ -74,6 +75,7 @@ function App() {
                 <Header windowWidth={windowWidth} />
                 <Routes>
                     <Route path='/' element={<Main windowWidth={windowWidth} />} />
+                    <Route path='/signup' element={<SignUp windowWidth={windowWidth} />} />
                 </Routes>
             </BrowserRouter>
         </>

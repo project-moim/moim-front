@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import SideNav from '../components/SideNav';
 import Card from '../components/Card';
-import { useState } from 'react';
+import { useDaumPostcodePopup } from 'react-daum-postcode';
 
 const Container = styled.div`
     width: 1440px;
@@ -152,7 +152,32 @@ const Profile = styled.div`
 
 function Main({ windowWidth }) {
 
+    // daum postcode script url
+    const open = useDaumPostcodePopup('http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
+
     const [message, setMessage] = useState('');
+
+    const searchLocation = (data) => { // 주소 검색 daum postcode
+        
+        let fullAddress = data.address;
+        let extraAddress = '';
+
+        if (data.addressType === 'R') {
+        if (data.bname !== '') {
+            extraAddress += data.bname;
+        }
+        if (data.buildingName !== '') {
+            extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+        }
+        fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+        }
+
+        console.log(fullAddress);
+    };
+
+    const handleLocation = () => { // Location 검색 팝업
+        open({ onComplete: searchLocation });
+    };
 
     const onChange = (e) => {
         const { target: {value} } = e;
@@ -181,7 +206,7 @@ function Main({ windowWidth }) {
                             + File
                             <InputFile type='file' accept='image/*' />
                         </Upload>
-                        <Button type='button'>Location</Button>
+                        <Button type='button' onClick={handleLocation}>Location</Button>
                         <SubmitBtn>Submit</SubmitBtn>
                     </ButtonWrapper>
                 </Form>
