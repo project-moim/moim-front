@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Card = styled.div`
+const CardContainer = styled.div`
     width: 90%;
     margin: 0 auto;
     min-height: 240px;
@@ -12,6 +12,7 @@ const Author = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
+    position: relative;
 `;
 
 const Profile = styled.div`
@@ -23,6 +24,24 @@ const Profile = styled.div`
     background-size: cover;
     margin: 0 8px;
 `;
+
+const Icon = styled.div`
+    padding: 0.5rem;
+    border: 1px solid #eee;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 60px;
+`
+
+const LikeIcon = styled(Icon)`
+    right: 20px;
+`
 
 const Image = styled.div`
     width: 80%;
@@ -52,14 +71,18 @@ const Tag = styled.div`
     margin: 0 5px;
 `;
 
+const Attachment = styled.div``;
+
 const Location = styled.div``;
 
-function NewsFeed() {
+function Card() {
     return ( 
-        <Card>
+        <CardContainer>
             <Author>
                 <Profile url={"url('https://images.unsplash.com/photo-1542309667-2a115d1f54c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80')"} />
                 <p>author</p>
+                <Icon>+ Follow</Icon>
+                <LikeIcon>♡</LikeIcon>
             </Author>
             <Image />
             <Text>
@@ -80,9 +103,11 @@ function NewsFeed() {
                     <Tag>#Tag3</Tag>
                 </TagWrapper>
             </Text>
-            <Location></Location>
-        </Card>
+            <Attachment>
+                <Location></Location>
+            </Attachment>
+        </CardContainer>
      );
 }
 
-export default NewsFeed;
+export default Card;

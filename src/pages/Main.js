@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import SideNav from '../components/SideNav';
 import Card from '../components/Card';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
+import Map from '../components/Map';
 
 const Container = styled.div`
     width: 1440px;
@@ -15,6 +16,9 @@ const Container = styled.div`
 
 const NewsFeed = styled.div`
     width: 70vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     @media screen and (max-width: 1280px) {
         width: 80vw;
     }
@@ -24,16 +28,17 @@ const NewsFeed = styled.div`
 `;
 
 const Form = styled.form`
-    width: 80%;
-    margin: 40px auto;
+    width: 70%;
+    margin: 40px 0;
 `;
 
-const Input = styled.input`
-    width: 90%;
+const Textarea = styled.textarea`
+    width: 100%;
     box-sizing: border-box;
     padding: 0.5em;
     margin-right: 8px;
     border: 1px solid #ddd;
+    resize: none;
 `;
 
 const Upload = styled.label`
@@ -53,7 +58,7 @@ const Upload = styled.label`
     cursor: pointer;
     @media screen and (max-width: 1440px) {
         margin-right: 10px;
-        padding: 0.2em 1em;
+        padding: 0.4em 1em;
     }
 `;
 
@@ -63,7 +68,7 @@ const ButtonWrapper = styled.div`
     margin: 8px 0;
 `;
 
-const InputFile = styled(Input)`
+const InputFile = styled.input`
     width: 0;
     height: 0;
     padding: 0;
@@ -92,7 +97,7 @@ const Button = styled.button`
     }
     @media screen and (max-width: 1440px) {
         margin-right: 10px;
-        padding: 0.2em 3em;
+        padding: 0.4em 3em;
     }
 `;
 
@@ -111,6 +116,20 @@ const SubmitBtn = styled(Button)`
         background: #F5D042;
         color: #0A174E;
     }
+`;
+
+const Preview = styled.div`
+    width: 70%;
+    margin: 0 atuo;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+`;
+
+const Thumbnail = styled.img`
+    width: 120px;
+    height: auto;
+    margin-right: 10px;
 `;
 
 const FollowerList = styled.div`
@@ -155,7 +174,9 @@ function Main({ windowWidth }) {
     // daum postcode script url
     const open = useDaumPostcodePopup('http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
 
+    const [currentPosition, setCurrentPosition] = useState(''); // 현재 위치
     const [message, setMessage] = useState('');
+    const [file, setFile]= useState([]);
 
     const searchLocation = (data) => { // 주소 검색 daum postcode
         
@@ -172,7 +193,8 @@ function Main({ windowWidth }) {
         fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
         }
 
-        console.log(fullAddress);
+        // console.log(fullAddress);
+        setCurrentPosition(fullAddress);
     };
 
     const handleLocation = () => { // Location 검색 팝업
@@ -184,9 +206,30 @@ function Main({ windowWidth }) {
         setMessage(value);
     }
 
+    const handleAddFile = (e) => { // 이미지 파일 추가
+        const fileList = e.target.files;
+
+        if(file.length < 4) { // 최대 4개까지 첨부 가능
+            for(let i = 0; i < fileList.length; i++) {
+                if(i < 4 - file.length) {
+                    const url = URL.createObjectURL(fileList[i]);
+                    setFile(prev => [...prev, url]);
+                }
+            }
+        }
+    }
+
+    const handleRemoveFile = (img) => { // 첨부한 이미지 삭제
+        setFile(file.filter(url => url !== img))
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(message);
+        console.log({
+            content: message,
+            media: file,
+            location: currentPosition
+        });
         setMessage('');
     }
 
@@ -200,16 +243,27 @@ function Main({ windowWidth }) {
             {/* news feed */}
             <NewsFeed>
                 <Form onSubmit={handleSubmit}>
-                    <Input type='text' name='message' value={message} maxLength={140} onChange={onChange} />
+                    <Textarea name='message' value={message} maxLength={140} onChange={onChange} />
                     <ButtonWrapper>
                         <Upload>
-                            + File
-                            <InputFile type='file' accept='image/*' />
+                            File
+                            <InputFile type='file' multiple accept='image/*' onChange={(e) => handleAddFile(e)} />
                         </Upload>
                         <Button type='button' onClick={handleLocation}>Location</Button>
                         <SubmitBtn>Submit</SubmitBtn>
                     </ButtonWrapper>
                 </Form>
+                <Preview>
+                    {
+                        file.length > 0 &&
+                        file.map((img, i) => (
+                            <Thumbnail key={i} src={img} alt='attachment file' onClick={() => handleRemoveFile(img)} />
+                        ))
+                    }
+                    {
+                        currentPosition !== '' && <Map currentPosition={currentPosition} />
+                    }
+                </Preview>
                 <Card />
             </NewsFeed>
             {/* Follower Lists */}

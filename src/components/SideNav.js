@@ -33,20 +33,25 @@ const MenuList = styled.div`
 
 const Menu = styled.div`
     width: 100%;
-    height: 60px;
+    height: 52px;
     margin: 0 auto;
     margin-bottom: 10px;
     border: 1px solid #0A174E;
-    border-radius: 20px;
-    padding: 1em 2em;
+    border-radius: 30px;
+    padding: 0.5em 2em;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
+    cursor: pointer;
+    &:hover {
+        border: 2px solid #F5D042;
+    }
 `;
 
 const Icon = styled.img`
     width: 24px;
     height: 24px;
-    margin-right: 8px;
+    margin-right: 10px;
 `;
 
 function SideNav() {
