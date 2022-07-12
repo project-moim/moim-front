@@ -124,12 +124,24 @@ const Preview = styled.div`
     margin-bottom: 40px;
     display: flex;
     justify-content: center;
+    @media screen and (max-width: 768px) {
+        flex-wrap: wrap;
+    }
 `;
 
 const Thumbnail = styled.img`
     width: 120px;
-    height: auto;
+    height: 120px;
     margin-right: 10px;
+    object-fit: cover;
+    &:hover {
+        border: 1px dashed #0A174E;
+    }
+    @media screen and (max-width: 768px) {
+        width: 120px;
+        margin-right: 0;
+        margin: 8px;
+    }
 `;
 
 const FollowerList = styled.div`
@@ -231,6 +243,8 @@ function Main({ windowWidth }) {
             location: currentPosition
         });
         setMessage('');
+        setFile([]);
+        setCurrentPosition('');
     }
 
     return ( 
@@ -261,7 +275,7 @@ function Main({ windowWidth }) {
                         ))
                     }
                     {
-                        currentPosition !== '' && <Map currentPosition={currentPosition} />
+                        currentPosition !== '' && <Map currentPosition={currentPosition} setCurrentPosition={setCurrentPosition} />
                     }
                 </Preview>
                 <Card />

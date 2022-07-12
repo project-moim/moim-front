@@ -4,11 +4,30 @@ import styled from 'styled-components';
 const MapContainer = styled.div`
     width: 120px;
     height: 120px;
+    position: relative;
+    display: ${props => props.position === '' ?  'none' : 'block'};
+`;
+
+const Button = styled.button`
+    position: absolute;
+    font-weight: 700;
+    top: 4px;
+    right: 4px;
+    border: none;
+    background: #F5D042;
+    color: #fff;
+    z-index: 2;
+    &:hover {
+        background: #0A174E;
+    }
+    &:active {
+        background: #0A174E;
+    }
 `;
 
 const { kakao } = window;
 
-function Map({ currentPosition }) {
+function Map({ currentPosition, setCurrentPosition }) {
 
     const getMap = () => {
         //지도를 담을 영역의 DOM 레퍼런스
@@ -55,6 +74,10 @@ function Map({ currentPosition }) {
         });
     }
 
+    const handleRemovePosition = () => { // 위치 정보 초기화
+        setCurrentPosition('')
+    }
+
     useEffect(() => {
         const map = getMap();
 
@@ -62,7 +85,9 @@ function Map({ currentPosition }) {
     }, []);
 
     return ( 
-        <MapContainer id='myMap'></MapContainer>
+        <MapContainer id='myMap' position={currentPosition}>
+            <Button onClick={handleRemovePosition}>x</Button>
+        </MapContainer>
      );
 }
 
