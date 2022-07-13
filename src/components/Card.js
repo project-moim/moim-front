@@ -61,14 +61,17 @@ const Text = styled.div`
     }
 `;
 
-const TagWrapper = styled.div`
+const ContentWrapper = styled.div`
     width: 100%;
     padding: 0.5em;
+    font-size: 0.8rem;
+    color: #999;
 `;
 
 const Tag = styled.div`
     display: inline-block;
-    margin: 0 5px;
+    margin-right: 5px;
+    font-size: 1rem;
 `;
 
 const Attachment = styled.div``;
@@ -97,11 +100,14 @@ function Card() {
                     이에 필요한 서류의 제출 또는 증인의 출석과 증언이나 의견의 진술을 
                     요구할 수 있다.
                 </p>
-                <TagWrapper>
+                <ContentWrapper>
                     <Tag>#Tag1</Tag>
                     <Tag>#Tag2</Tag>
                     <Tag>#Tag3</Tag>
-                </TagWrapper>
+                </ContentWrapper>
+                <ContentWrapper>
+                    2022년 07월 20일
+                </ContentWrapper>
             </Text>
             <Attachment>
                 <Location></Location>

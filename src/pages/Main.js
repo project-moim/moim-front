@@ -4,6 +4,7 @@ import SideNav from '../components/SideNav';
 import Card from '../components/Card';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import Map from '../components/Map';
+import Follower from '../components/Follower';
 
 const Container = styled.div`
     width: 1440px;
@@ -144,43 +145,6 @@ const Thumbnail = styled.img`
     }
 `;
 
-const FollowerList = styled.div`
-    width: 10vw;
-    margin-top: 20px;
-`;
-
-const Title = styled.div`
-    font-size: 0.9rem;
-    padding: 0 0 16px 8px;
-`;
-
-const Follower = styled.div`
-    width: 90%;
-    height: 64px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    background: #eee;
-    display: flex;
-    align-items: center;
-    font-size: 0.8rem;
-    font-weight: 200;
-    box-sizing: border-box;
-    padding: 0 0.5em;
-    overflow: hidden;
-    div {
-        max-width: 50%;
-    }
-`;
-
-const Profile = styled.div`
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: ${props => props.url || "url('')"} no-repeat;
-    background-size: cover;
-    margin: 0 8px;
-`;
-
 function Main({ windowWidth }) {
 
     // daum postcode script url
@@ -283,13 +247,7 @@ function Main({ windowWidth }) {
             {/* Follower Lists */}
             {
                 windowWidth > 1280 && // 1280px 이하 일 때 none
-                <FollowerList>
-                    <Title>Follower</Title>
-                    <Follower>
-                        <Profile url={"url('https://images.unsplash.com/photo-1542309667-2a115d1f54c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80')"} />
-                        <div>follower</div>
-                    </Follower>
-                </FollowerList>
+                <Follower />
             }
         </Container>
      );
