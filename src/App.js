@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import UseResize from './hooks/useResize';
 import SignUp from './pages/SignUp';
 import Detail from './pages/Detail';
+import Login from './pages/Login';
 
 const GlobalStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,
@@ -62,6 +63,10 @@ const GlobalStyle = createGlobalStyle`
         width: 100%;
         height: auto;
     }
+    textarea {
+        font-family: 'Noto Sans KR', sans-serif;
+        vertical-align: middle;
+    }
     // react-slick
     .slick-next:before, .slick-prev:before {
         color: #0A174E;
@@ -84,6 +89,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Main windowWidth={windowWidth} />} />
                     <Route path='/signup' element={<SignUp windowWidth={windowWidth} />} />
+                    <Route path='/login' element={<Login windowWidth={windowWidth} />} />
                     <Route path='/detail' element={<Detail windowWidth={windowWidth} />} />
                 </Routes>
             </BrowserRouter>

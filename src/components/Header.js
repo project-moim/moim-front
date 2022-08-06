@@ -61,7 +61,7 @@ function Header({ windowWidth }) {
                         </Link>
                     </Logo>
                     <ul>
-                        <li><Link to='/'>로그인</Link></li>
+                        <li><Link to='/login'>로그인</Link></li>
                         <li><Link to='/signup'>회원가입</Link></li>
                     </ul>
                 </Nav>
