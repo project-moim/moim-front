@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import styled from 'styled-components';
 import Map from './Map';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Form = styled.form`
     width: 70%;
@@ -17,8 +19,15 @@ const Textarea = styled.textarea`
     resize: none;
 `;
 
+const InputWrapper = styled.div`
+    width: 50%;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+`;
+
 const Upload = styled.label`
-    padding: 0.5em 1em;
+    padding: 0.5rem 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,7 +50,8 @@ const Upload = styled.label`
 const ButtonWrapper = styled.div`
     width: 100%;
     display: flex;
-    margin: 8px 0;
+    justify-content: center;
+    margin: 10px 0;
 `;
 
 const InputFile = styled.input`
@@ -54,7 +64,7 @@ const InputFile = styled.input`
 const Button = styled.button`
     width: 10%;
     background: #fff;
-    padding: 0.5em;
+    padding: 0.5rem 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,24 +88,44 @@ const Button = styled.button`
 `;
 
 const Input = styled.input`
-    width: 64px;
+    padding: 0.5rem;
     border-radius: 20px;
     border: 1px solid #0A174E;
     text-align: center;
-    margin-right: 10px;
+    margin: 8px 0;
 `;
 
 const InputTime = styled.input`
+    padding: 0.5rem;
     border-radius: 20px;
     border: 1px solid #0A174E;
     text-align: center;
-    margin-right: 10px;
+    margin: 8px 0;
+`;
+
+const DatePickerCustom = styled.div`
+    .react-datepicker-wrapper {
+        padding: 0.5rem;
+        border-radius: 20px;
+        border: 1px solid #0A174E;
+        text-align: center;
+        margin: 8px 0;
+        input {
+            border: none;
+            text-align: center;
+            &:focus {
+                outline: none;
+            }
+        }
+    }
 `;
 
 const Select = styled.select`
     border-radius: 20px;
     border: 1px solid #0A174E;
-    margin-right: 20px;
+    padding: 0.5rem;
+    text-align: center;
+    margin: 8px 0;
 `;
 
 const SubmitBtn = styled(Button)`
@@ -151,11 +181,19 @@ function Message({ windowWidth }) {
     // daum postcode script url
     const open = useDaumPostcodePopup('http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
 
-    const countRegex = /[^0-9]g/;
+    // const countRegex = /[^0-9]g/;
 
     const date = new Date();
     const hours = date.getHours() > 9 ? date.getHours() : `0${date.getHours()}`;
     const minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
+    // console.log(`${hours}:${minutes}`);
+
+    const [startDate, setStartDate] = useState(new Date());
+    const filterPassedTime = (time) => {
+        const currentDate = new Date();
+        const selectedDate = new Date(time);
+        return currentDate.getTime() < selectedDate.getTime();
+    };
 
     const [currentPosition, setCurrentPosition] = useState(''); // 현재 위치
     const [message, setMessage] = useState('');
@@ -223,24 +261,36 @@ function Message({ windowWidth }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(Number(gathering.time.substring(3, 5)));
+
         if(message.length > 0 || file.length > 0) {
             if(currentPosition === '') {
                 console.log({
                     content: message,
-                    url: file,
-                    address1: currentPosition
+                    url: file
                 });
-                setMessage('');
-                setFile([]);
-                setCurrentPosition('');
             } else {
-                console.log({
-                    content: message,
-                    url: file,
-                    address1: currentPosition,
-                    gathering
-                });
+                gathering.headcount === '' && setError('모임 양식을 정확하게 입력해주세요.');
+
+                if(Number(gathering.time.substring(0, 2)) < Number(hours)) {
+                    setError('모임 양식을 정확하게 입력해주세요.');
+                } else if(Number(gathering.time.substring(0, 2)) === Number(hours)) {
+                    (Number(gathering.time.substring(3, 5)) <= Number(minutes)) &&
+                    setError('모임 양식을 정확하게 입력해주세요.');
+                }
+                // console.log({
+                //     content: message,
+                //     url: file,
+                //     address1: currentPosition,
+                //     address2: gathering.address2,
+                //     headcount: gathering.headcount,
+                //     time:  gathering.time,
+                //     accept: gathering.accept
+                // }); 
             }
+            setMessage('');
+            setFile([]);
+            setCurrentPosition('');
         } else {
             setError('내용을 입력해주세요.')
         }
@@ -256,14 +306,30 @@ function Message({ windowWidth }) {
                     <InputFile type='file' multiple accept='image/*' onChange={(e) => handleAddFile(e)} />
                 </Upload>
                 <Button type='button' onClick={handleLocation}>Location</Button>
-                <Input type='text' placeholder='상세주소' name='address2' value={gathering.address2 || ''} onChange={gatheringOption} />
-                <Input type='text' placeholder='모임인원' name='count' value={gathering.count || ''} onChange={gatheringOption} />
-                <InputTime type='time' name='time' value={gathering.time || ''} onChange={gatheringOption} />
-                <Select name='accept' value={gathering.accept || ''} onChange={gatheringOption}>
+            </ButtonWrapper>
+            <InputWrapper>
+                <Input type='text' placeholder='상세주소' name='address2' onChange={gatheringOption} />
+                <Input type='number' min={2} max={100} placeholder='모임인원' name='count' onChange={gatheringOption} />
+                <DatePickerCustom>
+                    <DatePicker
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        filterTime={filterPassedTime}
+                        timeIntervals={15}
+                        timeCaption="Time"
+                        dateFormat="hh:mm aa"
+                    />
+                </DatePickerCustom>
+                {/* <InputTime type='time' name='time' onChange={gatheringOption} /> */}
+                <Select name='accept' onChange={gatheringOption}>
                     {/* <option selected disabled>참가 제한</option> */}
-                    <option defaultValue value='T'>누구나 모임</option>
+                    <option value='T'>누구나 모임</option>
                     <option value='F'>확인 후 모임</option>
                 </Select>
+            </InputWrapper>
+            <ButtonWrapper>
                 <SubmitBtn>Submit</SubmitBtn>
             </ButtonWrapper>
         </Form>

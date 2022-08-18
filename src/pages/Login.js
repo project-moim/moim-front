@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import SideNav from '../components/SideNav';
+import { login } from '../redux/userSlice';
 
 const Container = styled.div`
     width: 1440px;
@@ -76,6 +78,8 @@ function Login({ windowWidth }) {
 
     const url = `${process.env.REACT_APP_API_URL}/api/login`;
 
+    const dispatch = useDispatch();
+
     const [loginValue, setLoginValue] = useState({});
 
     const handleLoginValue = (e) => {
@@ -88,7 +92,16 @@ function Login({ windowWidth }) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log(loginValue);
+        // console.log(loginValue);
+        axios.post(url, loginValue)
+        .then(res => {
+            console.log(res);
+            dispatch(login({
+                id: loginValue.id,
+                token: res.headers.authorization
+            }));
+        }).catch(err => console.log(err));
+        setLoginValue();
     }
 
     return ( 
@@ -103,6 +116,10 @@ function Login({ windowWidth }) {
                     <Input type='password' placeholder='비밀번호' name='password' defaultValue={loginValue.password} onChange={handleLoginValue} />
                     <ButtonWrapper>
                         <Button>로그인</Button>
+                    </ButtonWrapper>
+                    <ButtonWrapper>
+                        <Button>구글 로그인</Button>
+                        <Button>카카오 로그인</Button>
                     </ButtonWrapper>
                 </Form>
             </Section>

@@ -16,7 +16,8 @@ export const userSlice = createSlice({
         logout: (state) => {
             state.id = '';
             state.token = '';
-            storage.removeItem('persist:root');
+            localStorage.removeItem('user');
+            // storage.removeItem('persist:root');
             return state;
         }
     }
