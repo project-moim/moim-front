@@ -3,6 +3,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import SideNav from '../components/SideNav';
 import Postcode from 'react-daum-postcode';
+import { useForm } from "react-hook-form";
+import axios from 'axios';
 
 const Container = styled.div`
     width: 1440px;
@@ -37,13 +39,23 @@ const Form = styled.form`
 const Input = styled.input`
     padding: 0.5rem;
     width: 50%;
-    margin-bottom: 16px;
+    margin: 12px 0;
+    border: none;
+    border-bottom: 1.5px solid #0A174E;
+    &:focus {
+        outline: none;
+    }
     @media screen and (max-width: 960px) {
         width: 70%;
     }
     @media screen and (max-width: 768px) {
         width: 90%;
     }
+`;
+
+const ErrorMessage = styled.div`
+    font-size: 0.8rem;
+    color: #888;
 `;
 
 const PostcodeWrapper = styled.div`
@@ -65,6 +77,7 @@ const Upload = styled.label`
     border: 1px solid #0A174E;
     color: #0A174E;
     cursor: pointer;
+    margin-top: 10px;
     &:hover {
         background: #0A174E;
         color: #fff;
@@ -84,7 +97,7 @@ const InputFile = styled(Input)`
 const ButtonWrapper = styled.div`
     display: flex;
     justify-content: center;
-    margin: 30px;
+    margin: 48px 0;
 `;
 
 const Button = styled.button`
@@ -129,7 +142,11 @@ const SubmitBtn = styled(Button)`
 
 function SignUp({ windowWidth }) {
 
-    const [userInfo, setUserInfo] = useState({});
+    const url = `${process.env.REACT_APP_API_URL}/api/join`;
+
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const [userInfo, setUserInfo] = useState(null);
 
     const [address, setAddress] = useState('');
     const [visible, setVisible] = useState(false); // 주소 입력창 상태
@@ -161,9 +178,18 @@ function SignUp({ windowWidth }) {
         setVisible(false);
     }
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        // console.log(userInfo);
+    const onSubmit = (data) => {
+        setUserInfo({
+            email: data.email,
+            password: data.email
+        });
+        (userInfo !== null && address !== '') &&
+        // console.log({...userInfo, address: address})
+        axios.post(url, {
+            ...userInfo,
+            address: address
+        }).then(res => console.log(res))
+        .catch(err => console.log(err));
     }
 
     return ( 
@@ -174,11 +200,31 @@ function SignUp({ windowWidth }) {
             }
             <Section>
                 <Title>회원가입</Title>
-                <Form onSubmit={onSubmit}>
-                    <Input type='text' placeholder='이메일' name='email' defaultValue={userInfo.email} onChange={handleUserInfo} />
-                    <Input type='text' placeholder='비밀번호' name='password' defaultValue={userInfo.password} onChange={handleUserInfo} />
-                    <Input type='text' placeholder='비밀번호 확인' name='passwordComfirm' />
-                    <Input type='text' placeholder='주소' name='address' defaultValue={address} onClick={() => setVisible(true)} readOnly />
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                    <Input type='text' placeholder='이메일' {...register('email', {
+                        required: true,
+                        pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+                    })} />
+                    <ErrorMessage>
+                        {errors.email?.type === 'required' && '이메일을 입력해주세요.'}
+                    </ErrorMessage>
+                    <Input type='password' placeholder='비밀번호' {...register('password', {
+                        required: true
+                    })} />
+                    <ErrorMessage>
+                        {errors.password?.type === 'required' && '비밀번호를 입력해주세요.'}
+                    </ErrorMessage>
+                    <Input type='password' placeholder='비밀번호 확인' {...register('passwordConfirm', {
+                        required: true
+                    })} />
+                    <ErrorMessage>
+                        {
+                            watch('password') !== '' && watch('passwordConfirm') !== '' && 
+                            watch('password') !== watch('passwordConfirm') &&
+                            '비밀번호를 다시 입력해주세요.'
+                        }
+                    </ErrorMessage>
+                    <Input type='text' placeholder='주소' name='address' value={address || ''} onClick={() => setVisible(true)} readOnly />
                     {
                         visible &&
                         <PostcodeWrapper>

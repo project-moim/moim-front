@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import styled from 'styled-components';
 import Map from './Map';
+import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -172,8 +173,9 @@ const Thumbnail = styled.img`
 `;
 
 const ErrorMessage = styled.p`
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #888;
+    text-align: center;
 `;
 
 function Message({ windowWidth }) {
@@ -181,6 +183,7 @@ function Message({ windowWidth }) {
     // daum postcode script url
     const open = useDaumPostcodePopup('http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
 
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
     // const countRegex = /[^0-9]g/;
 
     const date = new Date();
@@ -188,7 +191,7 @@ function Message({ windowWidth }) {
     const minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
     // console.log(`${hours}:${minutes}`);
 
-    const [startDate, setStartDate] = useState(new Date());
+    const [gatheringDate, setGatheringDate] = useState(new Date());
     const filterPassedTime = (time) => {
         const currentDate = new Date();
         const selectedDate = new Date(time);
@@ -251,18 +254,7 @@ function Message({ windowWidth }) {
         setFile(file.filter(url => url !== img))
     }
 
-    const gatheringOption = (e) => {
-        const { name, value } = e.target;
-        setGathering({
-            ...gathering,
-            [name]: value
-        })
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(Number(gathering.time.substring(3, 5)));
-
+    const onSubmit = (data) => {
         if(message.length > 0 || file.length > 0) {
             if(currentPosition === '') {
                 console.log({
@@ -270,35 +262,26 @@ function Message({ windowWidth }) {
                     url: file
                 });
             } else {
-                gathering.headcount === '' && setError('모임 양식을 정확하게 입력해주세요.');
-
-                if(Number(gathering.time.substring(0, 2)) < Number(hours)) {
-                    setError('모임 양식을 정확하게 입력해주세요.');
-                } else if(Number(gathering.time.substring(0, 2)) === Number(hours)) {
-                    (Number(gathering.time.substring(3, 5)) <= Number(minutes)) &&
-                    setError('모임 양식을 정확하게 입력해주세요.');
-                }
-                // console.log({
-                //     content: message,
-                //     url: file,
-                //     address1: currentPosition,
-                //     address2: gathering.address2,
-                //     headcount: gathering.headcount,
-                //     time:  gathering.time,
-                //     accept: gathering.accept
-                // }); 
+                console.log({
+                    content: message,
+                    url: file,
+                    address1: currentPosition,
+                    address2: data.address2,
+                    headcount: data.headcount,
+                    time:  gatheringDate,
+                    accept: data.accept
+                }); 
             }
             setMessage('');
             setFile([]);
             setCurrentPosition('');
-        } else {
-            setError('내용을 입력해주세요.')
-        }
+            setError('');
+        } else { setError('내용을 입력해주세요.'); }
     }
 
     return ( 
         <>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <Textarea name='message' value={message} maxLength={140} onChange={onChange} />
             <ButtonWrapper>
                 <Upload>
@@ -308,12 +291,19 @@ function Message({ windowWidth }) {
                 <Button type='button' onClick={handleLocation}>Location</Button>
             </ButtonWrapper>
             <InputWrapper>
-                <Input type='text' placeholder='상세주소' name='address2' onChange={gatheringOption} />
-                <Input type='number' min={2} max={100} placeholder='모임인원' name='count' onChange={gatheringOption} />
+                <Input type='text' placeholder='상세주소' {...register('address2', {
+                    required: (currentPosition !== '' && watch('address2') === '') ? true : false
+                })} />
+                <ErrorMessage>
+                    {errors.address2?.type === 'required' && '상세주소를 입력해주세요.'}
+                </ErrorMessage>
+                <Input type='number' placeholder='모임인원 (최소 2인 이상)' {...register('headcount', {
+                    min: 2, max: 100
+                })} />
                 <DatePickerCustom>
                     <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
+                        selected={gatheringDate}
+                        onChange={(date) => setGatheringDate(date)}
                         showTimeSelect
                         showTimeSelectOnly
                         filterTime={filterPassedTime}
@@ -322,9 +312,7 @@ function Message({ windowWidth }) {
                         dateFormat="hh:mm aa"
                     />
                 </DatePickerCustom>
-                {/* <InputTime type='time' name='time' onChange={gatheringOption} /> */}
-                <Select name='accept' onChange={gatheringOption}>
-                    {/* <option selected disabled>참가 제한</option> */}
+                <Select name='accept' {...register('accept')}>
                     <option value='T'>누구나 모임</option>
                     <option value='F'>확인 후 모임</option>
                 </Select>
@@ -344,9 +332,6 @@ function Message({ windowWidth }) {
                 currentPosition !== '' && <Map currentPosition={currentPosition} setCurrentPosition={setCurrentPosition} />
             }
         </Preview>
-        {
-            <ErrorMessage>{error}</ErrorMessage>
-        }
         </>
      );
 }

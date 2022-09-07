@@ -36,6 +36,8 @@ const Input = styled.input`
     padding: 0.5rem;
     width: 50%;
     margin-bottom: 16px;
+    border: none;
+    border-bottom: 1.5px solid #0A174E;
     @media screen and (max-width: 960px) {
         width: 70%;
     }
@@ -117,10 +119,10 @@ function Login({ windowWidth }) {
                     <ButtonWrapper>
                         <Button>로그인</Button>
                     </ButtonWrapper>
-                    <ButtonWrapper>
+                    {/* <ButtonWrapper>
                         <Button>구글 로그인</Button>
                         <Button>카카오 로그인</Button>
-                    </ButtonWrapper>
+                    </ButtonWrapper> */}
                 </Form>
             </Section>
         </Container>
