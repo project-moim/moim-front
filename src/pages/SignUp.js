@@ -5,6 +5,7 @@ import SideNav from '../components/SideNav';
 import Postcode from 'react-daum-postcode';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 
 const Container = styled.div`
     width: 1440px;
@@ -142,22 +143,15 @@ const SubmitBtn = styled(Button)`
 
 function SignUp({ windowWidth }) {
 
-    const url = `${process.env.REACT_APP_API_URL}/api/join`;
+    const url = `${process.env.REACT_APP_API_URL}api/join`;
+    const { mutate: postUser } = useMutation(() => {
+        axios.post(url)
+    });
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
-    const [userInfo, setUserInfo] = useState(null);
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({ mode: 'onBlur' });
 
     const [address, setAddress] = useState('');
     const [visible, setVisible] = useState(false); // 주소 입력창 상태
-
-    const handleUserInfo = (e) => {
-        const { name, value } = e.target;
-        setUserInfo({
-            ...userInfo,
-            [name] : value
-        })
-    }
 
     const handlePostcode = (data) => { // 주소 입력시 실행되는 함수
         let fullAddress = data.address;
@@ -179,17 +173,19 @@ function SignUp({ windowWidth }) {
     }
 
     const onSubmit = (data) => {
-        setUserInfo({
+        address !== '' &&
+        console.log({ email: data.email, password: data.password, address: address});
+        postUser({
             email: data.email,
-            password: data.email
+            password: data.password,
+            address: data.address
         });
-        (userInfo !== null && address !== '') &&
-        // console.log({...userInfo, address: address})
-        axios.post(url, {
-            ...userInfo,
-            address: address
-        }).then(res => console.log(res))
-        .catch(err => console.log(err));
+        // axios.post(url, {
+        //     email: data.email,
+        //     password: data.password,
+        //     address: address
+        // }).then(res => console.log(res))
+        // .catch(err => console.log(err));
     }
 
     return ( 

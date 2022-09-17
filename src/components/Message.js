@@ -5,6 +5,7 @@ import Map from './Map';
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from 'axios';
 
 const Form = styled.form`
     width: 70%;
@@ -180,6 +181,8 @@ const ErrorMessage = styled.p`
 
 function Message({ windowWidth }) {
 
+    const url = `${process.env.REACT_APP_API_URL}/api/post`;
+
     // daum postcode script url
     const open = useDaumPostcodePopup('http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
 
@@ -191,6 +194,8 @@ function Message({ windowWidth }) {
     const minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
     // console.log(`${hours}:${minutes}`);
 
+    const formData = new FormData();
+
     const [gatheringDate, setGatheringDate] = useState(new Date());
     const filterPassedTime = (time) => {
         const currentDate = new Date();
@@ -201,13 +206,6 @@ function Message({ windowWidth }) {
     const [currentPosition, setCurrentPosition] = useState(''); // 현재 위치
     const [message, setMessage] = useState('');
     const [file, setFile]= useState([]);
-    const [gathering, setGathering] = useState({
-        address2: '',
-        headcount: '',
-        time: '',
-        accept: 'T'
-    });
-    const [error, setError] = useState('');
 
     const searchLocation = (data) => { // 주소 검색 daum postcode
         
@@ -245,38 +243,58 @@ function Message({ windowWidth }) {
                 if(i < 4 - file.length) {
                     const url = URL.createObjectURL(fileList[i]);
                     setFile(prev => [...prev, url]);
+                    formData.append(`file${i}`, fileList[i]);
                 }
             }
         }
+
+        // for (let value of formData.values()) {
+        //     console.log(value);
+        // }
     }
 
     const handleRemoveFile = (img) => { // 첨부한 이미지 삭제
-        setFile(file.filter(url => url !== img))
+        setFile(file.filter(url => url !== img));
+        window.URL.revokeObjectURL(img);
     }
 
     const onSubmit = (data) => {
         if(message.length > 0 || file.length > 0) {
             if(currentPosition === '') {
-                console.log({
-                    content: message,
-                    url: file
-                });
+                // console.log({
+                //     content: message,
+                //     files: formData
+                // });
+                axios.post(url, {
+                    cotent: message,
+                    files: formData
+                }).then(res => console.log(res))
+                .catch(err => console.log(err));
             } else {
-                console.log({
+                // console.log({
+                //     content: message,
+                //     files: formData,
+                //     address1: currentPosition,
+                //     address2: data.address2,
+                //     headcount: data.headcount,
+                //     time:  gatheringDate,
+                //     accept: data.accept
+                // }); 
+                axios.post(url, {
                     content: message,
-                    url: file,
+                    files: formData,
                     address1: currentPosition,
                     address2: data.address2,
                     headcount: data.headcount,
                     time:  gatheringDate,
                     accept: data.accept
-                }); 
+                }).then(res => console.log(res))
+                .catch(err => console.log(err));
             }
             setMessage('');
             setFile([]);
             setCurrentPosition('');
-            setError('');
-        } else { setError('내용을 입력해주세요.'); }
+        } else { window.alert('작성한 내용을 다시 확인해주세요.'); }
     }
 
     return ( 
