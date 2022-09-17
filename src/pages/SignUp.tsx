@@ -141,12 +141,12 @@ const SubmitBtn = styled(Button)`
     }
 `;
 
-function SignUp({ windowWidth }) {
+const SignUp = (props: {windowWidth: number}) => {
 
     const url = `${process.env.REACT_APP_API_URL}api/join`;
-    const { mutate: postUser } = useMutation(() => {
-        axios.post(url)
-    });
+    // const { mutate: postUser } = useMutation(() => {
+    //     axios.post(url)
+    // });
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm({ mode: 'onBlur' });
 
@@ -175,11 +175,11 @@ function SignUp({ windowWidth }) {
     const onSubmit = (data) => {
         address !== '' &&
         console.log({ email: data.email, password: data.password, address: address});
-        postUser({
-            email: data.email,
-            password: data.password,
-            address: data.address
-        });
+        // postUser({
+        //     email: data.email,
+        //     password: data.password,
+        //     address: data.address
+        // });
         // axios.post(url, {
         //     email: data.email,
         //     password: data.password,
@@ -191,7 +191,7 @@ function SignUp({ windowWidth }) {
     return ( 
         <Container>
             {
-                windowWidth > 960 && // 960px 이하 모바일 메뉴로 변경
+                props.windowWidth > 960 && // 960px 이하 모바일 메뉴로 변경
                 <SideNav />
             }
             <Section>

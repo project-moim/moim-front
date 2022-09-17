@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
-const MapContainer = styled.div`
+const MapContainer = styled.div<{ position?: string }>`
     width: 120px;
     height: 120px;
     position: relative;
-    display: ${props => props.position === '' ?  'none' : 'block'};
+    display: ${(props: any) => props.position === '' ?  'none' : 'block'};
 `;
 
 const Button = styled.button`
@@ -25,7 +25,7 @@ const Button = styled.button`
     }
 `;
 
-const { kakao } = window;
+const { kakao }: any = window;
 
 function Map({ currentPosition, setCurrentPosition }) {
 

@@ -63,7 +63,9 @@ const Button = styled.button`
 `;
 
 
-function Main({ windowWidth }) {
+const Main = (props: {windowWidth: number}) => {
+
+    const { windowWidth } = props;
 
     const [addPost, setAddPost] = useState(false);
 

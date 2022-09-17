@@ -85,7 +85,7 @@ const GlobalStyle = createGlobalStyle`
 function App() {
 
     // 화면 사이즈 변경 감지
-    const windowWidth = UseResize();
+    const windowWidth: number = UseResize();
 
     return (
         <>

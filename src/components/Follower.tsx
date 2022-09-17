@@ -29,11 +29,11 @@ const Followers = styled.div`
     }
 `;
 
-const Profile = styled.div`
+const Profile = styled.div<{ url?: string }>`
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: ${props => props.url || "url('')"} no-repeat;
+    background: ${(props: any) => props.url || "url('')"} no-repeat;
     background-size: cover;
     margin: 0 8px;
 `;

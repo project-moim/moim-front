@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 function UseResize() {
 
-    const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
+    const [currentWidth, setCurrentWidth] = useState<number>(window.innerWidth);
 
     const handleResize = () => {
-        let resizeWindow = null;
+        let resizeWindow: any = null;
         clearTimeout(resizeWindow);
         resizeWindow = setTimeout(() => {
             setCurrentWidth(window.innerWidth);

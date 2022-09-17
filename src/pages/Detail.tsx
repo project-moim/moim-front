@@ -27,12 +27,12 @@ const Author = styled.div`
     position: relative;
 `;
 
-const Profile = styled.div`
+const Profile = styled.div<{ url: string }>`
     width: 32px;
     height: 32px;
     border-radius: 50%;
     background-color: #eee;
-    background: ${props => props.url || "url('')"} no-repeat;
+    background: ${(props: any) => props.url || "url('')"} no-repeat;
     background-size: cover;
     margin: 0 8px;
 `;
@@ -95,7 +95,7 @@ const Form = styled.form`
     margin: 20px auto;
 `;
 
-const Textarea = styled.textarea`
+const Textarea = styled.textarea<{ type?: string }>`
     border: none;
     width: 80%;
     border-bottom: 1px solid rgba(10, 23, 78, 0.2);
@@ -162,7 +162,9 @@ const CommentBtn = styled.span`
     cursor: pointer;
 `;
 
-function Detail({ windowWidth }) {
+const Detail = (props: {windowWidth: number}) => {
+
+    const { windowWidth } = props;
 
     const [comment, setComment] = useState('');
 
@@ -225,7 +227,8 @@ function Detail({ windowWidth }) {
                 </Attachment>
                 <CommentWrapper>
                     <Form onKeyUp={onCheckEnter} onSubmit={addComment}>
-                        <Textarea type='text' rows='1' value={comment} onChange={onChange} />
+                        {/* <Textarea type='text' rows='1' value={comment} onChange={onChange} /> */}
+                        <Textarea type='text' value={comment} onChange={onChange} />
                         <Button>Comment</Button>
                     </Form>
                     <List>

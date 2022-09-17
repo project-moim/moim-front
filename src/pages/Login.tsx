@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -76,15 +76,15 @@ const Button = styled.button`
 `;
 
 
-function Login({ windowWidth }) {
+const Login = (props: {windowWidth: number}) => {
 
     const url = `${process.env.REACT_APP_API_URL}/api/login`;
 
     const dispatch = useDispatch();
 
-    const [loginValue, setLoginValue] = useState({});
+    const [loginValue, setLoginValue] = useState({ email: '', password: '' });
 
-    const handleLoginValue = (e) => {
+    const handleLoginValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setLoginValue({
             ...loginValue,
@@ -92,24 +92,24 @@ function Login({ windowWidth }) {
         })
     }
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
         // console.log(loginValue);
         axios.post(url, loginValue)
         .then(res => {
             console.log(res);
             dispatch(login({
-                id: loginValue.id,
+                id: loginValue.email,
                 token: res.headers.authorization
             }));
         }).catch(err => console.log(err));
-        setLoginValue();
+        setLoginValue(null);
     }
 
     return ( 
         <Container>
             {
-                windowWidth > 960 && // 960px 이하 모바일 메뉴로 변경
+                props.windowWidth > 960 && // 960px 이하 모바일 메뉴로 변경
                 <SideNav />
             }
             <Section>

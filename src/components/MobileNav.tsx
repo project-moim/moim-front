@@ -10,10 +10,10 @@ const MobileNavigation = styled.nav`
     }
 `;
 
-const Icon = styled.div`
+const Icon = styled.div<{ url?: string }>`
     width: 24px;
     height: 24px;
-    background: ${props => props.url || "url('../assets/images/icon/menu.png')"};
+    background: ${(props: any) => props.url || "url('../assets/images/icon/menu.png')"};
     background-repeat: no-repeat;
     background-size: cover;
 `;
