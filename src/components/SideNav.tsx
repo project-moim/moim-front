@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ReactComponent as AppIcon } from "../assets/icon/apps.svg";
+import { ReactComponent as UserIcon } from "../assets/icon/user-add.svg";
 
 const SideNavigation = styled.div`
     width: 20vw;
@@ -36,22 +38,17 @@ const Menu = styled.div`
     height: 52px;
     margin: 0 auto;
     margin-bottom: 10px;
-    border: 1px solid #0A174E;
-    border-radius: 30px;
+    background: #0A174E;
+    border-radius: 10px;
+    color: #fff;
     padding: 0.5em 2em;
     font-size: 0.9rem;
     display: flex;
     align-items: center;
     cursor: pointer;
     &:hover {
-        border: 2px solid #F5D042;
+        background: #112581;
     }
-`;
-
-const Icon = styled.img`
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
 `;
 
 function SideNav() {
@@ -68,11 +65,11 @@ function SideNav() {
             </Profile>
             <MenuList>
                 <Menu>
-                    <Icon src='../assets/images/icon/menu.png' alt='icon' />
+                    <AppIcon fill="#fff" style={{ width: "20px", height: "20px", marginRight: "10px" }} />
                     <p>Home</p>
                 </Menu>
                 <Menu>
-                    <Icon src='../assets/images/icon/followers.png' alt='icon' />
+                    <UserIcon fill="#fff" style={{ width: "20px", height: "20px", marginRight: "10px" }} />
                     <p>Following</p>
                 </Menu>
             </MenuList>

@@ -45,7 +45,7 @@ const Button = styled.button`
     justify-content: center;
     border: 1px solid #0A174E;
     color: #0A174E;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-right: 10px;
     cursor: pointer;
     &:hover {

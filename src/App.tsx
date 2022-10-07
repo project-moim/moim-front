@@ -94,8 +94,8 @@ function App() {
                 <Header windowWidth={windowWidth} />
                 <Routes>
                     <Route path='/' element={<Main windowWidth={windowWidth} />} />
-                    <Route path='/signup' element={<SignUp windowWidth={windowWidth} />} />
-                    <Route path='/login' element={<Login windowWidth={windowWidth} />} />
+                    <Route path='/signup' element={<SignUp />} />
+                    <Route path='/login' element={<Login />} />
                     <Route path='/detail' element={<Detail windowWidth={windowWidth} />} />
                 </Routes>
             </BrowserRouter>
