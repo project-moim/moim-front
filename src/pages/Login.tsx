@@ -3,7 +3,6 @@ import React, { SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import SideNav from '../components/SideNav';
 import { login } from '../redux/userSlice';
 
 const Container = styled.div`
@@ -16,11 +15,13 @@ const Container = styled.div`
 `;
 
 const Section = styled.section`
-    width: 80vw;
-    @media screen and (max-width: 960px) {
-        width: 90%;
-        margin: 0 auto;
-    }
+    width: 90%;
+    margin: 0 auto;
+`;
+
+const Title = styled.h2`
+    text-align: center;
+    margin: 80px 0 40px 0;
 `;
 
 const Form = styled.form`
@@ -34,7 +35,7 @@ const Form = styled.form`
 
 const Input = styled.input`
     padding: 0.5rem;
-    width: 50%;
+    width: 40%;
     margin-bottom: 16px;
     border: none;
     border-bottom: 1.5px solid #0A174E;
@@ -65,10 +66,10 @@ const Button = styled.button`
     color: #fff;
     cursor: pointer;
     &:hover {
-        background: #F5D042;
+        background: #112581;
     }
     &:active {
-        background: #F5D042;
+        background: #112581;
     }
     @media screen and (max-width: 1440px) {
         margin-right: 10px;
@@ -76,7 +77,7 @@ const Button = styled.button`
 `;
 
 
-const Login = (props: {windowWidth: number}) => {
+const Login = () => {
 
     const url = `${process.env.REACT_APP_API_URL}/api/login`;
 
@@ -108,11 +109,8 @@ const Login = (props: {windowWidth: number}) => {
 
     return ( 
         <Container>
-            {
-                props.windowWidth > 960 && // 960px 이하 모바일 메뉴로 변경
-                <SideNav />
-            }
             <Section>
+                <Title>로그인</Title>
                 <Form onSubmit={onSubmit}>
                     <Input type='text' placeholder='이메일' name='email' defaultValue={loginValue.email} onChange={handleLoginValue} />
                     <Input type='password' placeholder='비밀번호' name='password' defaultValue={loginValue.password} onChange={handleLoginValue} />

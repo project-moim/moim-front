@@ -34,13 +34,12 @@ const Upload = styled.label`
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
-    border-radius: 20px;
-    border: 1px solid #0A174E;
-    color: #0A174E;
+    border-radius: 10px;
+    background: #0A174E;
+    color: #fff;
     margin-right: 10px;
     &:hover {
-        background: #0A174E;
-        color: #fff;
+        background: #112581;
     }
     cursor: pointer;
     @media screen and (max-width: 1440px) {
@@ -64,51 +63,43 @@ const InputFile = styled.input`
 `;
 
 const Button = styled.button`
-    width: 10%;
-    background: #fff;
-    padding: 0.5rem 3rem;
+    border: none;
+    background: #0A174E;
+    padding: 0.5rem 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #0A174E;
-    color: #0A174E;
-    border-radius: 20px;
+    color: #fff;
+    border-radius: 10px;
     margin-right: 10px;
     cursor: pointer;
     &:hover {
-        background: #0A174E;
-        color: #fff;
+        background: #112581;
     }
     &:active {
-        background: #0A174E;
-        color: #fff;
+        background: #112581;
     }
     @media screen and (max-width: 1440px) {
         margin-right: 10px;
-        padding: 0.4em 3em;
+        padding: 0.4rem 3rem;
     }
 `;
 
 const Input = styled.input`
     padding: 0.5rem;
-    border-radius: 20px;
-    border: 1px solid #0A174E;
+    border: none;
+    border-bottom: 1px solid #0A174E;
     text-align: center;
     margin: 8px 0;
-`;
-
-const InputTime = styled.input`
-    padding: 0.5rem;
-    border-radius: 20px;
-    border: 1px solid #0A174E;
-    text-align: center;
-    margin: 8px 0;
+    &:focus {
+        outline: none;
+    }
 `;
 
 const DatePickerCustom = styled.div`
     .react-datepicker-wrapper {
         padding: 0.5rem;
-        border-radius: 20px;
+        border-radius: 5px;
         border: 1px solid #0A174E;
         text-align: center;
         margin: 8px 0;
@@ -123,7 +114,7 @@ const DatePickerCustom = styled.div`
 `;
 
 const Select = styled.select`
-    border-radius: 20px;
+    border-radius: 5px;
     border: 1px solid #0A174E;
     padding: 0.5rem;
     text-align: center;
@@ -135,15 +126,13 @@ const SubmitBtn = styled(Button)`
     border-radius: 8px;
     background: #0A174E;
     color: #fff;
-    padding: 0.5em 4em;
-    font-weight: 700;
+    padding: 0.5rem 4rem;
+    font-weight: 500;
     &:hover {
-        background: #F5D042;
-        color: #0A174E;
+        background: #112581;
     }
     &:active {
-        background: #F5D042;
-        color: #0A174E;
+        background: #112581;
     }
 `;
 
@@ -336,7 +325,7 @@ function Message({ windowWidth }) {
                 </Select>
             </InputWrapper>
             <ButtonWrapper>
-                <SubmitBtn>Submit</SubmitBtn>
+                <SubmitBtn>글 작성</SubmitBtn>
             </ButtonWrapper>
         </Form>
         <Preview>

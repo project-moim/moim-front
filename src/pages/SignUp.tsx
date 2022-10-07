@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import SideNav from '../components/SideNav';
 import Postcode from 'react-daum-postcode';
 import { useForm } from "react-hook-form";
-import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
+import { signup } from 'src/hooks/queries/user';
+import { useNavigate } from 'react-router';
 
 const Container = styled.div`
     width: 1440px;
@@ -17,11 +17,8 @@ const Container = styled.div`
 `;
 
 const Section = styled.section`
-    width: 80vw;
-    @media screen and (max-width: 960px) {
-        width: 90%;
-        margin: 0 auto;
-    }
+    width: 90%;
+    margin: 0 auto;
 `;
 
 const Title = styled.h2`
@@ -132,23 +129,25 @@ const SubmitBtn = styled(Button)`
     background: #0A174E;
     color: #fff;
     &:hover {
-        background: #F5D042;
-        color: #0A174E;
+        background: #112581;
     }
     &:active {
-        background: #F5D042;
-        color: #0A174E;
+        background: #112581;
     }
 `;
 
-const SignUp = (props: {windowWidth: number}) => {
+const SignUp = () => {
 
-    const url = `${process.env.REACT_APP_API_URL}api/join`;
-    // const { mutate: postUser } = useMutation(() => {
-    //     axios.post(url)
-    // });
+    const navigate = useNavigate();
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({ mode: 'onBlur' });
+    const { mutate: postUser } = useMutation(signup, {
+        onSuccess: res => {
+            alert(res.data);
+            navigate('/');
+        }
+    });
+
+    const { register, setValue, handleSubmit, watch, formState: { errors } } = useForm({ mode: 'onBlur' });
 
     const [address, setAddress] = useState('');
     const [visible, setVisible] = useState(false); // 주소 입력창 상태
@@ -168,18 +167,23 @@ const SignUp = (props: {windowWidth: number}) => {
         }
 
         // console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+        setValue('address', fullAddress);
         setAddress(fullAddress);
         setVisible(false);
     }
 
     const onSubmit = (data) => {
-        address !== '' &&
-        console.log({ email: data.email, password: data.password, address: address});
-        // postUser({
-        //     email: data.email,
-        //     password: data.password,
-        //     address: data.address
-        // });
+        // console.log({ email: data.email, password: data.password, address: address});
+        try {
+            postUser({
+                email: data.email,
+                password: data.password,
+                address: data.address
+            });
+            // isSuccess === true && alert('회원가입이 완료되었습니다.');
+        } catch(e) {
+            console.log(e);
+        }
         // axios.post(url, {
         //     email: data.email,
         //     password: data.password,
@@ -190,37 +194,36 @@ const SignUp = (props: {windowWidth: number}) => {
 
     return ( 
         <Container>
-            {
-                props.windowWidth > 960 && // 960px 이하 모바일 메뉴로 변경
-                <SideNav />
-            }
             <Section>
                 <Title>회원가입</Title>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Input type='text' placeholder='이메일' {...register('email', {
                         required: true,
                         pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-                    })} />
+                    })} style={errors.email && { borderBottom:"1.5px solid #888" }} />
                     <ErrorMessage>
                         {errors.email?.type === 'required' && '이메일을 입력해주세요.'}
+                        {errors.email?.type === 'pattern' && '올바른 이메일을 입력해주세요.'}
                     </ErrorMessage>
                     <Input type='password' placeholder='비밀번호' {...register('password', {
                         required: true
-                    })} />
+                    })} style={errors.password && { borderBottom:"1.5px solid #888" }} />
                     <ErrorMessage>
                         {errors.password?.type === 'required' && '비밀번호를 입력해주세요.'}
                     </ErrorMessage>
                     <Input type='password' placeholder='비밀번호 확인' {...register('passwordConfirm', {
                         required: true
-                    })} />
+                    })} style={errors.passwordConfirm && { borderBottom:"1.5px solid #888" }} />
                     <ErrorMessage>
                         {
                             watch('password') !== '' && watch('passwordConfirm') !== '' && 
                             watch('password') !== watch('passwordConfirm') &&
-                            '비밀번호를 다시 입력해주세요.'
+                            '비밀번호가 일치하지 않습니다.'
                         }
                     </ErrorMessage>
-                    <Input type='text' placeholder='주소' name='address' value={address || ''} onClick={() => setVisible(true)} readOnly />
+                    <Input type='text' placeholder='주소' name='address' value={address || ''} {...register('address', {
+                        required: true
+                    })} onClick={() => setVisible(true)} readOnly />
                     {
                         visible &&
                         <PostcodeWrapper>
