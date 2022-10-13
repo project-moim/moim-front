@@ -14,14 +14,14 @@ const Button = styled.button`
     top: 4px;
     right: 4px;
     border: none;
-    background: #F5D042;
+    background: #03DAC6;
     color: #fff;
     z-index: 2;
     &:hover {
-        background: #0A174E;
+        background: #018786;
     }
     &:active {
-        background: #0A174E;
+        background: #018786;
     }
 `;
 

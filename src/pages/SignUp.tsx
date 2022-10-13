@@ -39,7 +39,7 @@ const Input = styled.input`
     width: 50%;
     margin: 12px 0;
     border: none;
-    border-bottom: 1.5px solid #0A174E;
+    border-bottom: 1.5px solid #444;
     &:focus {
         outline: none;
     }
@@ -71,13 +71,14 @@ const Upload = styled.label`
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
-    border-radius: 20px;
-    border: 1px solid #0A174E;
-    color: #0A174E;
+    border-radius: 10px;
+    border: 2px solid #03DAC6;
+    color: #018786;
     cursor: pointer;
     margin-top: 10px;
     &:hover {
-        background: #0A174E;
+        border: none;
+        background: #018786;
         color: #fff;
     }
     @media screen and (max-width: 1440px) {
@@ -106,16 +107,16 @@ const Button = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #0A174E;
-    color: #0A174E;
+    border: 1px solid #6200EE;
+    color: #6200EE;
     border-radius: 20px;
     cursor: pointer;
     &:hover {
-        background: #0A174E;
+        background: #6200EE;
         color: #fff;
     }
     &:active {
-        background: #0A174E;
+        background: #6200EE;
         color: #fff;
     }
     @media screen and (max-width: 1440px) {
@@ -126,13 +127,14 @@ const Button = styled.button`
 const SubmitBtn = styled(Button)`
     border: none;
     border-radius: 8px;
-    background: #0A174E;
+    background: #6200EE;
+    font-weight: 700;
     color: #fff;
     &:hover {
-        background: #112581;
+        background: #3700B3;
     }
     &:active {
-        background: #112581;
+        background: #3700B3;
     }
 `;
 

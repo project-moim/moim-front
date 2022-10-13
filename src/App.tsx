@@ -38,6 +38,7 @@ const GlobalStyle = createGlobalStyle`
     }
     body {
         line-height: 1;
+        color: #444;
     }
     ol, ul {
         list-style: none;
@@ -75,10 +76,10 @@ const GlobalStyle = createGlobalStyle`
     }
     // react-slick
     .slick-next:before, .slick-prev:before {
-        color: #0A174E;
+        color: #6200EE;
     }
     .slick-dots li.slick-active button:before {
-        color: #0A174E;
+        color: #6200EE;
     }
 `;
 

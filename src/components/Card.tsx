@@ -28,7 +28,7 @@ const Profile = styled.div<{ url?: string }>`
 const Icon = styled.div`
     padding: 0.5rem;
     border: 1px solid #eee;
-    border-radius: 30px;
+    border-radius: 20px;
     font-size: 0.8rem;
     display: flex;
     align-items: center;

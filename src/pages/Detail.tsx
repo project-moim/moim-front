@@ -111,17 +111,17 @@ const Button = styled.button`
     width: 10%;
     background: #fff;
     padding: 0.4rem;
-    border: 1px solid #0A174E;
-    color: #0A174E;
+    border: 1px solid #6200EE;
+    color: #6200EE;
     border-radius: 10px;
     margin-right: 20px;
     cursor: pointer;
     &:hover {
-        background: #0A174E;
+        background: #6200EE;
         color: #fff;
     }
     &:active {
-        background: #0A174E;
+        background: #6200EE;
         color: #fff;
     }
     @media screen and (max-width: 1440px) {
