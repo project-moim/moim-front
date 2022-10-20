@@ -15,9 +15,10 @@ const Form = styled.form`
 const Textarea = styled.textarea`
     width: 100%;
     box-sizing: border-box;
-    padding: 0.5em;
+    padding: 8px;
     margin-right: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #444;
+    border-radius: 5px;
     resize: none;
 `;
 
@@ -29,22 +30,24 @@ const InputWrapper = styled.div`
 `;
 
 const Upload = styled.label`
-    padding: 0.5rem 2rem;
+    padding: 0.4rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
     border-radius: 10px;
-    background: #0A174E;
-    color: #fff;
+    background: #fff;
+    border: 2px solid #03DAC6;
+    color: #018786;
     margin-right: 10px;
     &:hover {
-        background: #112581;
+        border: 2px solid #018786;
+        color: #fff;
+        background: #018786;
     }
     cursor: pointer;
     @media screen and (max-width: 1440px) {
         margin-right: 10px;
-        padding: 0.4em 1em;
     }
 `;
 
@@ -63,32 +66,35 @@ const InputFile = styled.input`
 `;
 
 const Button = styled.button`
-    border: none;
-    background: #0A174E;
-    padding: 0.5rem 2rem;
+    background: #fff;
+    border: 2px solid #03DAC6;
+    color: #018786;
+    padding: 0.4rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
     border-radius: 10px;
     margin-right: 10px;
     cursor: pointer;
     &:hover {
-        background: #112581;
+        border: 2px solid #018786;
+        color: #fff;
+        background: #018786;
     }
     &:active {
-        background: #112581;
+        border: 2px solid #018786;
+        color: #fff;
+        background: #018786;
     }
     @media screen and (max-width: 1440px) {
         margin-right: 10px;
-        padding: 0.4rem 3rem;
     }
 `;
 
 const Input = styled.input`
     padding: 0.5rem;
     border: none;
-    border-bottom: 1px solid #0A174E;
+    border-bottom: 1px solid #444;
     text-align: center;
     margin: 8px 0;
     &:focus {
@@ -100,7 +106,7 @@ const DatePickerCustom = styled.div`
     .react-datepicker-wrapper {
         padding: 0.5rem;
         border-radius: 5px;
-        border: 1px solid #0A174E;
+        border: 1px solid #444;
         text-align: center;
         margin: 8px 0;
         input {
@@ -115,7 +121,7 @@ const DatePickerCustom = styled.div`
 
 const Select = styled.select`
     border-radius: 5px;
-    border: 1px solid #0A174E;
+    border: 1px solid #444;
     padding: 0.5rem;
     text-align: center;
     margin: 8px 0;
@@ -123,23 +129,26 @@ const Select = styled.select`
 
 const SubmitBtn = styled(Button)`
     border: none;
-    border-radius: 8px;
-    background: #0A174E;
+    border-radius: 10px;
+    background: #6200EE;
     color: #fff;
     padding: 0.5rem 4rem;
-    font-weight: 500;
+    font-weight: 700;
+    margin-top: 30px;
     &:hover {
-        background: #112581;
+        border: none;
+        background: #3700B3;
     }
     &:active {
-        background: #112581;
+        border: none;
+        background: #3700B3;
     }
 `;
 
 const Preview = styled.div`
     width: 70%;
     margin: 0 atuo;
-    margin-bottom: 40px;
+    margin-top: 40px;
     display: flex;
     justify-content: center;
     @media screen and (max-width: 768px) {
@@ -153,7 +162,7 @@ const Thumbnail = styled.img`
     margin-right: 10px;
     object-fit: cover;
     &:hover {
-        border: 1px dashed #0A174E;
+        border: 1px dashed #018786;
     }
     @media screen and (max-width: 768px) {
         width: 120px;
@@ -288,14 +297,25 @@ function Message({ windowWidth }) {
 
     return ( 
         <>
+        <Preview>
+            {
+                file.length > 0 &&
+                file.map((img, i) => (
+                    <Thumbnail key={i} src={img} alt='attachment file' onClick={() => handleRemoveFile(img)} />
+                ))
+            }
+            {
+                currentPosition !== '' && <Map currentPosition={currentPosition} setCurrentPosition={setCurrentPosition} />
+            }
+        </Preview>
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Textarea name='message' value={message} maxLength={140} onChange={onChange} />
             <ButtonWrapper>
                 <Upload>
-                    File
+                    + 파일
                     <InputFile type='file' multiple accept='image/*' onChange={(e) => handleAddFile(e)} />
                 </Upload>
-                <Button type='button' onClick={handleLocation}>Location</Button>
+                <Button type='button' onClick={handleLocation}>+ 장소</Button>
             </ButtonWrapper>
             <InputWrapper>
                 <Input type='text' placeholder='상세주소' {...register('address2', {
@@ -325,20 +345,9 @@ function Message({ windowWidth }) {
                 </Select>
             </InputWrapper>
             <ButtonWrapper>
-                <SubmitBtn>글 작성</SubmitBtn>
+                <SubmitBtn>글 쓰기</SubmitBtn>
             </ButtonWrapper>
         </Form>
-        <Preview>
-            {
-                file.length > 0 &&
-                file.map((img, i) => (
-                    <Thumbnail key={i} src={img} alt='attachment file' onClick={() => handleRemoveFile(img)} />
-                ))
-            }
-            {
-                currentPosition !== '' && <Map currentPosition={currentPosition} setCurrentPosition={setCurrentPosition} />
-            }
-        </Preview>
         </>
      );
 }

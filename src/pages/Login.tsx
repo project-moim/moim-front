@@ -2,8 +2,9 @@ import axios from 'axios';
 import React, { SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-import { login } from '../redux/userSlice';
+import { login } from '../redux/authSlice';
 
 const Container = styled.div`
     width: 1440px;
@@ -34,11 +35,12 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-    padding: 0.5rem;
+    padding: 1rem 0.5rem;
     width: 40%;
     margin-bottom: 16px;
-    border: none;
-    border-bottom: 1.5px solid #0A174E;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    /* border-bottom: 1.5px solid #444; */
     @media screen and (max-width: 960px) {
         width: 70%;
     }
@@ -50,11 +52,10 @@ const Input = styled.input`
 const ButtonWrapper = styled.div`
     display: flex;
     justify-content: center;
-    margin: 30px;
+    margin-top: 30px;
 `;
 
 const Button = styled.button`
-    width: 10%;
     width: 120px;
     height: 32px;
     display: flex;
@@ -62,24 +63,38 @@ const Button = styled.button`
     justify-content: center;
     border: none;
     border-radius: 8px;
-    background: #0A174E;
+    background: #6200EE;
+    font-weight: 700;
     color: #fff;
     cursor: pointer;
     &:hover {
-        background: #112581;
+        background: #3700B3;
     }
     &:active {
-        background: #112581;
+        background: #3700B3;
     }
     @media screen and (max-width: 1440px) {
         margin-right: 10px;
     }
 `;
 
+const OptionButton = styled.button`
+    border: none;
+    background: #fff;
+    padding: 4px;
+    cursor: pointer;
+    color: #3700B3;
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
 
 const Login = () => {
 
-    const url = `${process.env.REACT_APP_API_URL}/api/login`;
+    const url = `${process.env.REACT_APP_API_URL}users/login`;
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -96,6 +111,7 @@ const Login = () => {
     const onSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
         // console.log(loginValue);
+        loginValue &&
         axios.post(url, loginValue)
         .then(res => {
             console.log(res);
@@ -112,10 +128,13 @@ const Login = () => {
             <Section>
                 <Title>로그인</Title>
                 <Form onSubmit={onSubmit}>
-                    <Input type='text' placeholder='이메일' name='email' defaultValue={loginValue.email} onChange={handleLoginValue} />
-                    <Input type='password' placeholder='비밀번호' name='password' defaultValue={loginValue.password} onChange={handleLoginValue} />
+                    <Input type='text' placeholder='이메일' name='email' onChange={handleLoginValue} />
+                    <Input type='password' placeholder='비밀번호' name='password' onChange={handleLoginValue} />
                     <ButtonWrapper>
                         <Button>로그인</Button>
+                    </ButtonWrapper>
+                    <ButtonWrapper style={{ marginTop: "10px" }}>
+                        <OptionButton type='button' onClick={() => navigate('/signup')}>가입하기</OptionButton>
                     </ButtonWrapper>
                     {/* <ButtonWrapper>
                         <Button>구글 로그인</Button>

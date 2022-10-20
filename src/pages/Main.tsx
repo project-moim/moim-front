@@ -37,28 +37,26 @@ const ButtonWrapper = styled.div`
 `;
 
 const Button = styled.button`
-    width: 10%;
-    background: #fff;
-    padding: 0.5em;
+    border: none;
+    background: #6200EE;
+    padding: 0.5rem 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #0A174E;
-    color: #0A174E;
+    color: #fff;
     border-radius: 10px;
     margin-right: 10px;
     cursor: pointer;
     &:hover {
-        background: #0A174E;
+        background: #3700B3;
         color: #fff;
     }
     &:active {
-        background: #0A174E;
+        background: #3700B3;
         color: #fff;
     }
     @media screen and (max-width: 1440px) {
         margin-right: 10px;
-        padding: 0.4em 3em;
     }
 `;
 
@@ -85,7 +83,7 @@ const Main = (props: {windowWidth: number}) => {
                 <ButtonWrapper>
                     <Button onClick={handlePost}>
                         {
-                            addPost === false ? 'New Post' : '← back'
+                            addPost === false ? '글 쓰기' : '← 뒤로 가기'
                         }
                     </Button>
                 </ButtonWrapper>

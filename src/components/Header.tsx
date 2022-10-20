@@ -21,13 +21,21 @@ const Nav = styled.nav`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #eee;
+    /* border-bottom: 1px solid #eee; */
     ul {
         display: flex;
         margin-right: 2em;
+        font-size: 0.9rem;
+        font-weight: 500;
     }
     li {
         margin: 0 10px;
+        > a {
+            color: #555;
+            &:hover {
+                color: #888;
+            }
+        }
     }
 `;
 
@@ -56,7 +64,7 @@ function Header({ windowWidth }) {
                 <Nav>
                     <Logo>
                         <Link to='/'>
-                            <img src='https://cdn-icons-png.flaticon.com/512/2824/2824572.png' alt='logo' />
+                            {/* <img src='https://cdn-icons-png.flaticon.com/512/2824/2824572.png' alt='logo' />s */}
                             <div>MOIM</div>
                         </Link>
                     </Logo>

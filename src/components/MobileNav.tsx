@@ -1,21 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ReactComponent as AppIcon } from "../assets/icon/apps.svg";
+import { ReactComponent as UserIcon } from "../assets/icon/user-add.svg";
+import { ReactComponent as LoginIcon } from "../assets/icon/sign-in-alt.svg";
 
 const MobileNavigation = styled.nav`
     width: 100%;
-    margin-top: 10px;
+    padding: 20px 0;
+    border-top: 1px solid #ddd;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background: #fff;
     ul {
         display: flex;
         justify-content: space-around;
     }
-`;
-
-const Icon = styled.div<{ url?: string }>`
-    width: 24px;
-    height: 24px;
-    background: ${(props: any) => props.url || "url('../assets/images/icon/menu.png')"};
-    background-repeat: no-repeat;
-    background-size: cover;
 `;
 
 function MobileNav() {
@@ -23,16 +23,16 @@ function MobileNav() {
         <MobileNavigation>
             <ul>
                 <li>
-                    <Icon url={"url('../assets/images/icon/user.png')"} />
+                    <AppIcon fill="#444" style={{ width: "20px", height: "20px", marginRight: "16px" }} />
                 </li>
                 <li>
-                    <Icon />
+                    <UserIcon fill="#444" style={{ width: "20px", height: "20px", marginRight: "16px" }} />
                 </li>
                 <li>
-                    <Icon  url={"url('../assets/images/icon/followers.png')"} />
+                    <AppIcon fill="#444" style={{ width: "20px", height: "20px", marginRight: "16px" }} />
                 </li>
                 <li>
-                    <Icon  url={"url('../assets/images/icon/followers.png')"} />
+                    <LoginIcon fill="#444" style={{ width: "20px", height: "20px", marginRight: "16px" }} />
                 </li>
             </ul>
         </MobileNavigation>

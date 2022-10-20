@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Header from './components/Header';
 import Main from './pages/Main';
 import { createGlobalStyle } from 'styled-components';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import UseResize from './hooks/useResize';
 import SignUp from './pages/SignUp';
 import Detail from './pages/Detail';
 import Login from './pages/Login';
+import MyPage from './pages/MyPage';
+import { useSelector } from 'react-redux';
+import { RootState } from './redux/store';
+import { setCurrentUser } from './redux/authSlice';
 
 const GlobalStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,
@@ -38,6 +42,7 @@ const GlobalStyle = createGlobalStyle`
     }
     body {
         line-height: 1;
+        color: #444;
     }
     ol, ul {
         list-style: none;
@@ -75,14 +80,28 @@ const GlobalStyle = createGlobalStyle`
     }
     // react-slick
     .slick-next:before, .slick-prev:before {
-        color: #0A174E;
+        color: #6200EE;
     }
     .slick-dots li.slick-active button:before {
-        color: #0A174E;
+        color: #6200EE;
     }
 `;
 
 function App() {
+
+    const useAuth = () => {
+        const currentUser = useSelector(setCurrentUser);
+        return useMemo(() => ({ user: currentUser }), [currentUser]);
+    }
+
+    // user 정보가 없는 경우 로그인 화면으로 이동
+    const RequireAuth = ({ children }) => {
+       let { user } = useAuth();
+       if(!user) {
+        return <Navigate to='/login' replace={true} />
+       }
+       return children;
+    }
 
     // 화면 사이즈 변경 감지
     const windowWidth: number = UseResize();
@@ -96,7 +115,9 @@ function App() {
                     <Route path='/' element={<Main windowWidth={windowWidth} />} />
                     <Route path='/signup' element={<SignUp />} />
                     <Route path='/login' element={<Login />} />
-                    <Route path='/detail' element={<Detail windowWidth={windowWidth} />} />
+                    <Route path='/post/*' element={<RequireAuth><Detail windowWidth={windowWidth} /></RequireAuth>} />
+                    {/* <Route path='/post/*' element={<Detail windowWidth={windowWidth} />} /> */}
+                    <Route path='/userinfo/*' element={<MyPage />} />
                 </Routes>
             </BrowserRouter>
         </>
