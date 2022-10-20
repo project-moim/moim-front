@@ -2,8 +2,9 @@ import axios from 'axios';
 import React, { SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-import { login } from '../redux/userSlice';
+import { login } from '../redux/authSlice';
 
 const Container = styled.div`
     width: 1440px;
@@ -51,11 +52,10 @@ const Input = styled.input`
 const ButtonWrapper = styled.div`
     display: flex;
     justify-content: center;
-    margin: 30px;
+    margin-top: 30px;
 `;
 
 const Button = styled.button`
-    width: 10%;
     width: 120px;
     height: 32px;
     display: flex;
@@ -78,10 +78,23 @@ const Button = styled.button`
     }
 `;
 
+const OptionButton = styled.button`
+    border: none;
+    background: #fff;
+    padding: 4px;
+    cursor: pointer;
+    color: #3700B3;
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
 
 const Login = () => {
 
     const url = `${process.env.REACT_APP_API_URL}users/login`;
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -119,6 +132,9 @@ const Login = () => {
                     <Input type='password' placeholder='비밀번호' name='password' onChange={handleLoginValue} />
                     <ButtonWrapper>
                         <Button>로그인</Button>
+                    </ButtonWrapper>
+                    <ButtonWrapper style={{ marginTop: "10px" }}>
+                        <OptionButton type='button' onClick={() => navigate('/signup')}>가입하기</OptionButton>
                     </ButtonWrapper>
                     {/* <ButtonWrapper>
                         <Button>구글 로그인</Button>

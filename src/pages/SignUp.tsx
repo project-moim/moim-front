@@ -180,6 +180,7 @@ const SignUp = () => {
             postUser({
                 email: data.email,
                 password: data.password,
+                name: data.username,
                 address: data.address
             });
             // isSuccess === true && alert('회원가입이 완료되었습니다.');
@@ -223,6 +224,7 @@ const SignUp = () => {
                             '비밀번호가 일치하지 않습니다.'
                         }
                     </ErrorMessage>
+                    <Input type='text' placeholder='닉네임' {...register('username')} />
                     <Input type='text' placeholder='주소' name='address' value={address || ''} {...register('address', {
                         required: true
                     })} onClick={() => setVisible(true)} readOnly />

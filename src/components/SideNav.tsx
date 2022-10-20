@@ -1,5 +1,9 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { RootState } from 'src/redux/store';
 import styled from 'styled-components';
+import { ReactComponent as LoginIcon } from "../assets/icon/sign-in-alt.svg";
 import { ReactComponent as AppIcon } from "../assets/icon/apps.svg";
 import { ReactComponent as UserIcon } from "../assets/icon/user-add.svg";
 
@@ -55,23 +59,38 @@ const Menu = styled.div`
 `;
 
 function SideNav() {
+
+    const user = useSelector((state: RootState) => state.auth);
+
     return ( 
         <SideNavigation>
-            <Profile>
-                <Thumbnail>
-                    <img src='https://images.unsplash.com/photo-1542309667-2a115d1f54c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80' alt='user profile' />
-                </Thumbnail>
-                <p><strong>User</strong></p>
-            </Profile>
+                {
+                    user.token === null
+                    ? <Link to='/login'>
+                        <Menu style={{ width: "90%", background: "#03DAC6", borderRadius: "5px" }}>
+                            <LoginIcon width="20px" height="20px" fill="#fff" style={{ marginRight: "16px" }} />
+                            <p>로그인 하기</p>
+                        </Menu>
+                    </Link>
+                    : <Link to={`/userinfo`}><Profile>
+                        <Thumbnail>
+                            <img src='https://images.unsplash.com/photo-1542309667-2a115d1f54c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80' alt='user profile' />
+                        </Thumbnail>
+                        <p><strong>User</strong></p>
+                    </Profile></Link>
+                }
             <MenuList>
                 <Menu>
                     <AppIcon fill="#fff" style={{ width: "20px", height: "20px", marginRight: "16px" }} />
                     <p>Home</p>
                 </Menu>
-                <Menu>
-                    <UserIcon fill="#fff" style={{ width: "20px", height: "20px", marginRight: "16px" }} />
-                    <p>Following</p>
-                </Menu>
+                {
+                    user.token !== null &&
+                    <Menu>
+                        <UserIcon fill="#fff" style={{ width: "20px", height: "20px", marginRight: "16px" }} />
+                        <p>Following</p>
+                    </Menu>
+                }
             </MenuList>
         </SideNavigation>
      );
